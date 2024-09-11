@@ -1,14 +1,34 @@
+// import express from "express";
+// import cors from "cors";
+// import { errorMiddleware } from "./middlewares/error.js";
+// import morgan from "morgan";
 import dotenv from "dotenv";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { schema } from "./graphQL/schema/schema.js";
 import { connectDB } from "./database/database.js";
-import { getAllUsers } from "./controllers/users.js";
+//import { User } from "./models/userModel.js";
+//import { Course } from "./models/corseModel.js";
+import { getAllUsers, getUserById } from "./controllers/users.js";
 import { getAllCourses, getCoursesById } from "./controllers/courses.js";
 dotenv.config({ path: "./.env" });
 export const envMode = process.env.NODE_ENV?.trim() || "DEVELOPMENT";
 const port = Number(process.env.PORT) || 3000;
 connectDB(process.env.MONGO_URI);
+// async function creatingRecord() {
+//   const course = await Course.create({
+//     name: "React JS",
+//   });
+//   const instructor = await User.create({
+//     name: "Gaara",
+//     email: "gaaraKasekegi@mail.com",
+//     password: "vgdkbnbgnbgdbn",
+//     course: course._id,
+//   });
+//   course.instructor = instructor._id;
+//   await course.save();
+// }
+// creatingRecord();
 // 'ApolloServer' a class, the below is an instance of it.
 const server = new ApolloServer({
     typeDefs: schema,
@@ -18,6 +38,14 @@ const server = new ApolloServer({
             users: getAllUsers,
             courses: getAllCourses,
             course: getCoursesById,
+        },
+        Course: {
+            instructor: async (course) => {
+                // `course` is the parent here, representing the Course object
+                //console.log("course ", course);
+                // console.log("course.instructor ", course.instructor); // This should be the ObjectId
+                return await getUserById(course.instructor);
+            },
         },
     },
 }); // passed typeDefs and Resolvers these are both objects.

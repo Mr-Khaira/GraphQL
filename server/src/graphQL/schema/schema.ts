@@ -7,17 +7,18 @@ type Users {
     name:String!,
     email:String!,
     password:String,
-    course: Course!, # Course or String.
+    course:Course!, # Course or String.
 }
 
 type Course{
-    name : String!,
+    name:String!,
+    instructor: Users!,
 }
 
 type Query {
 hello: String,
 users: [Users],
-courses : [Course],
+courses: [Course],
 course(id:ID!): Course,
 }
 # This one course(id:ID!): Course, requires id argument for us to pass the 
