@@ -4,17 +4,12 @@
 // import morgan from "morgan";
 import dotenv from "dotenv";
 
-import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
-
-import { schema } from "./graphQL/schema/schema.js";
-
 import { connectDB } from "./database/database.js";
 //import { User } from "./models/userModel.js";
 //import { Course } from "./models/corseModel.js";
 
-import { getAllUsers, getUserById } from "./controllers/users.js";
-import { getAllCourses, getCoursesById } from "./controllers/courses.js";
+import { graphQL } from "./graphQL/graphql.js";
+
 dotenv.config({ path: "./.env" });
 
 export const envMode = process.env.NODE_ENV?.trim() || "DEVELOPMENT";
@@ -39,41 +34,7 @@ connectDB(process.env.MONGO_URI!);
 // }
 // creatingRecord();
 
-// 'ApolloServer' a class, the below is an instance of it.
-
-const server = new ApolloServer({
-  typeDefs: schema,
-  resolvers: {
-    Query: {
-      hello: () => "Hello World",
-      users: getAllUsers,
-      courses: getAllCourses,
-      course: getCoursesById,
-    },
-    Course: {
-      instructor: async (course) => {
-        // `course` is the parent here, representing the Course object
-        //console.log("course ", course);
-        // console.log("course.instructor ", course.instructor); // This should be the ObjectId
-
-        return await getUserById(course.instructor);
-      },
-    },
-  },
-}); // passed typeDefs and Resolvers these are both objects.
-
-/* typedef is basically like a calss(c++) that defines the "shape" 
-of queries that are executed against our data. */
-
-startStandaloneServer(server, {
-  listen: { port },
-})
-  .then(() => {
-    console.log("server started at ", port);
-  })
-  .catch((error) => {
-    console.log("Error at standALoneServer ", error);
-  });
+graphQL(port);
 
 //   const app = express();
 
