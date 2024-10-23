@@ -18,13 +18,14 @@ export const graphQLResolvers = {
   Mutation: {
     newUser: async (_: any, { name, age, gender }: SampleUser) => {
       tempUser.push({ name, age, gender });
-      console.log("VNFSKVSFN ", tempUser);
+      //console.log("VNFSKVSFN ", tempUser);
       return "User added successgully";
     },
   },
   Query: {
     hello: () => "Hello World",
     users: getAllUsers,
+    // Controller Functions: These abstract the data-fetching logic from the database, making the resolvers cleaner. They are imported and used in the resolver functions.
     courses: getAllCourses,
     course: getCoursesById,
     sampleUsers: () => tempUser,

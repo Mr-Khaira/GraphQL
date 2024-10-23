@@ -13,7 +13,7 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 //     resolvers: graphQLResolvers,
 //   }); // passed typeDefs and Resolvers these are both objects.
 
-//   /* typedef is basically like a calss(c++) that defines the "shape"
+//   /* typedef is basically like a class(c++) that defines the "shape"
 //   of queries that are executed against our data. */
 
 //   startStandaloneServer(server, {
@@ -34,6 +34,9 @@ export const graphQL = () => {
   const server = new ApolloServer({
     typeDefs: graphQLSchema,
     resolvers: graphQLResolvers,
+
+    // Type Definitions (typeDefs): Define the structure of the GraphQL schema.
+    // Resolvers: The logic behind each GraphQL query and mutation, determining how to fetch or manipulate data.
   }); // passed typeDefs and Resolvers these are both objects.
 
   /* typedef is basically like a calss(c++) that defines the "shape" 
